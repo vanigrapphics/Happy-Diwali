@@ -1,0 +1,799 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Deepawali Greeting</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: Georgia, "Times New Roman", serif;
+}
+
+.app {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    height: 100vh;
+    height: 100dvh;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: radial-gradient(ellipse at center, #160b24 0%, #050008 65%, #000 100%);
+    color: #fff;
+}
+
+#fireworks {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.greeting-area {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(.94);
+    transition: opacity .8s ease, transform .8s ease, visibility .8s;
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.screen.exit {
+    opacity: 0;
+    transform: scale(1.08);
+    visibility: hidden;
+}
+
+/* FIRST GREETING */
+
+.message-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.message-line {
+    color: #ffe7a0;
+    font-size: clamp(25px, 7vw, 39px);
+    line-height: 1.35;
+    font-weight: bold;
+    text-shadow:
+        0 0 5px #ffdf80,
+        0 0 15px #ffb300,
+        0 0 35px #ff8c00;
+    opacity: 0;
+    animation: revealText 1.5s ease forwards, goldenGlow 2s infinite alternate;
+}
+
+.message-line:nth-child(2) {
+    animation-delay: 1.2s, 0s;
+}
+
+@keyframes revealText {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+        filter: blur(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+@keyframes goldenGlow {
+    from { text-shadow: 0 0 8px #ffcf40, 0 0 18px #ff9900; }
+    to { text-shadow: 0 0 15px #fff0a0, 0 0 35px #ffb300, 0 0 55px #ff6600; }
+}
+
+/* DIWALI GREETING */
+
+#diwaliScreen {
+    overflow: hidden;
+}
+
+.diwali-title {
+    position: relative;
+    z-index: 2;
+    font-size: clamp(35px, 10vw, 57px);
+    font-weight: bold;
+    letter-spacing: 2px;
+    line-height: 1.3;
+    color: #ffe9a5;
+    text-shadow:
+        0 0 8px #fff1a8,
+        0 0 20px #ffb300,
+        0 0 40px #ff6d00;
+    opacity: 0;
+    transform: scale(.7);
+}
+
+.diwali-title.show {
+    animation: diwaliReveal 1.2s ease forwards;
+}
+
+.diwali-title.dissolve {
+    animation: dissolveTitle .9s ease forwards;
+}
+
+@keyframes diwaliReveal {
+    0% {
+        opacity: 0;
+        transform: scale(.6);
+        filter: blur(12px);
+    }
+    70% {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: blur(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes dissolveTitle {
+    to {
+        opacity: 0;
+        transform: scale(1.6);
+        filter: blur(15px);
+        letter-spacing: 12px;
+    }
+}
+
+.diya {
+    margin-top: 28px;
+    font-size: 65px;
+    filter: drop-shadow(0 0 15px #ff9800);
+    animation: diyaGlow 1s infinite alternate;
+}
+
+@keyframes diyaGlow {
+    from { transform: scale(1); filter: drop-shadow(0 0 10px #ff9800); }
+    to { transform: scale(1.1); filter: drop-shadow(0 0 25px #ffeb3b); }
+}
+
+#diwaliSparkles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.sparkle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--spark-color);
+    box-shadow:
+        0 0 5px var(--spark-color),
+        0 0 12px var(--spark-color),
+        0 0 22px var(--spark-color);
+    animation: sparkleMove var(--duration) ease-out forwards;
+}
+
+.sparkle::before,
+.sparkle::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: var(--spark-color);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 8px var(--spark-color);
+}
+
+.sparkle::before {
+    width: 2px;
+    height: 17px;
+}
+
+.sparkle::after {
+    width: 17px;
+    height: 2px;
+}
+
+@keyframes sparkleMove {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(.5) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--dx), var(--dy)) scale(1.8) rotate(180deg);
+    }
+}
+
+/* SENDER SCREEN */
+
+#senderScreen {
+    /* Center all sender content horizontally and vertically */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 18px;
+}
+
+.sender-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    gap: 18px;
+}
+
+.best-wishes {
+    color: #ffe7a0;
+    font-size: clamp(25px, 7vw, 36px);
+    font-weight: bold;
+    text-shadow: 0 0 10px #ffb300, 0 0 25px #ff6d00;
+}
+
+.sender-photo {
+    display: block;
+    width: min(72%, 270px);
+    max-height: 38%;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+    margin: 0 auto;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+}
+
+.sender-name {
+    color: #ffe7a0;
+    font-size: clamp(24px, 7vw, 35px);
+    font-weight: bold;
+    text-shadow: 0 0 10px #ffb300, 0 0 25px #ff6d00;
+    overflow-wrap: anywhere;
+}
+
+/* BOTTOM CONTROLS */
+
+.controls {
+    position: relative;
+    z-index: 5;
+    flex-shrink: 0;
+    width: 100%;
+    padding: 12px 15px max(12px, env(safe-area-inset-bottom));
+    background: rgba(0, 0, 0, .88);
+    border-top: 1px solid rgba(255, 215, 100, .3);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.controls input[type="text"],
+.controls input[type="file"] {
+    width: 100%;
+    padding: 9px;
+    border-radius: 5px;
+    border: 1px solid #a77b24;
+    background: #140e08;
+    color: #fff;
+    font-size: 13px;
+}
+
+.controls input[type="file"] {
+    padding: 7px;
+}
+
+.button-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+
+.controls button {
+    flex: 1;
+    padding: 10px 5px;
+    border: 1px solid #ffd45c;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #8d4b00, #e0a52d);
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.controls button:active {
+    transform: scale(.97);
+}
+
+.controls button.share {
+    background: linear-gradient(135deg, #075e32, #12a85a);
+    border-color: #4dff9c;
+}
+
+@media (max-height: 650px) {
+    .controls {
+        padding-top: 7px;
+        gap: 5px;
+    }
+
+    .controls input[type="text"],
+    .controls input[type="file"] {
+        padding: 6px;
+    }
+
+    .controls button {
+        padding: 7px 4px;
+    }
+
+    .sender-content {
+        gap: 10px;
+    }
+
+    .sender-photo {
+        max-height: 32%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <canvas id="fireworks"></canvas>
+
+    <main class="greeting-area">
+
+        <!-- SCREEN 1 -->
+        <section class="screen active" id="messageScreen">
+            <div class="message-content">
+                <div class="message-line">
+                    May Your Life Shine With Happiness.
+                </div>
+                <div class="message-line">
+                    May This Diwali Bring Prosperity.
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 2 -->
+        <section class="screen" id="diwaliScreen">
+            <div id="diwaliSparkles"></div>
+            <div class="diwali-title" id="diwaliTitle">
+                HAPPY<br>DEEPAWALI
+            </div>
+            <div class="diya">🪔</div>
+        </section>
+
+        <!-- SCREEN 3 -->
+        <section class="screen" id="senderScreen">
+            <div class="sender-content">
+                <div class="best-wishes">Best Wishes From</div>
+                <img id="senderPhoto" class="sender-photo" src="photo.png" alt="Sender Photo">
+                <div class="sender-name" id="senderName">Your Name</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FIXED BOTTOM CONTROLS -->
+    <footer class="controls">
+
+        <input type="text" id="nameInput" placeholder="Enter sender name">
+
+        <input type="file" id="photoInput" accept="image/*">
+
+        <div class="button-row">
+            <button onclick="updateGreeting()">Update</button>
+            <button class="share" onclick="shareWhatsApp()">WhatsApp</button>
+            <button onclick="shareGreeting()">Share Greeting</button>
+        </div>
+
+    </footer>
+
+</div>
+
+<script>
+/* --------------------------------
+   GREETING PERSONALIZATION
+-------------------------------- */
+
+const params = new URLSearchParams(window.location.search);
+
+const nameFromUrl = params.get("from");
+const photoFromUrl = params.get("photo");
+
+const senderName = document.getElementById("senderName");
+const nameInput = document.getElementById("nameInput");
+const senderPhoto = document.getElementById("senderPhoto");
+
+let sharedPhotoUrl = photoFromUrl || "";
+
+if (nameFromUrl) {
+    senderName.textContent = nameFromUrl;
+    nameInput.value = nameFromUrl;
+}
+
+if (photoFromUrl) {
+    senderPhoto.src = photoFromUrl;
+}
+
+function updateGreeting() {
+    const name = nameInput.value.trim();
+
+    senderName.textContent = name || "Your Name";
+}
+
+document.getElementById("photoInput").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        senderPhoto.src = event.target.result;
+        sharedPhotoUrl = "";
+    };
+
+    reader.readAsDataURL(file);
+});
+
+function getShareLink() {
+    const name = nameInput.value.trim() || "Your Name";
+
+    const url = new URL(window.location.href);
+
+    url.searchParams.set("from", name);
+
+    if (sharedPhotoUrl) {
+        url.searchParams.set("photo", sharedPhotoUrl);
+    } else {
+        url.searchParams.delete("photo");
+    }
+
+    return url.toString();
+}
+
+function shareWhatsApp() {
+    updateGreeting();
+
+    const link = getShareLink();
+
+    const message = "🪔 Happy Deepawali! 🪔\n\n" +
+        "I am sending you my special Diwali wishes.\n\n" + link;
+
+    window.open(
+        "https://wa.me/?text=" + encodeURIComponent(message),
+        "_blank"
+    );
+}
+
+async function shareGreeting() {
+    updateGreeting();
+
+    const link = getShareLink();
+
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: "Happy Deepawali",
+                text: "My special Diwali wishes!",
+                url: link
+            });
+        } catch (e) {
+            console.log("Sharing cancelled.");
+        }
+    } else {
+        try {
+            await navigator.clipboard.writeText(link);
+            alert("Greeting link copied!");
+        } catch (e) {
+            prompt("Copy your greeting link:", link);
+        }
+    }
+}
+
+/* --------------------------------
+   SCREEN SEQUENCE
+-------------------------------- */
+
+const messageScreen = document.getElementById("messageScreen");
+const diwaliScreen = document.getElementById("diwaliScreen");
+const senderScreen = document.getElementById("senderScreen");
+const diwaliTitle = document.getElementById("diwaliTitle");
+
+function transition(from, to) {
+    from.classList.remove("active");
+    from.classList.add("exit");
+
+    to.classList.add("active");
+
+    setTimeout(() => {
+        from.classList.remove("exit");
+    }, 900);
+}
+
+setTimeout(() => {
+    transition(messageScreen, diwaliScreen);
+}, 4000);
+
+setTimeout(() => {
+    diwaliTitle.classList.add("show");
+    createSparkles(90, true);
+    startDiwaliSparkles();
+}, 4850);
+
+setTimeout(() => {
+    diwaliTitle.classList.remove("show");
+    diwaliTitle.classList.add("dissolve");
+
+    createSparkles(180, true);
+    stopDiwaliSparkles();
+}, 6800);
+
+setTimeout(() => {
+    transition(diwaliScreen, senderScreen);
+}, 8000);
+
+/* --------------------------------
+   MULTICOLOUR SPARKLES
+-------------------------------- */
+
+const sparkleColors = [
+    "#ff1744",
+    "#00e676",
+    "#2979ff",
+    "#ffd600",
+    "#ffffff",
+    "#ff00ff",
+    "#00ffff",
+    "#b026ff",
+    "#c6ff00",
+    "#ff9100"
+];
+
+const sparkleLayer = document.getElementById("diwaliSparkles");
+
+function createSparkles(count, burst = false) {
+    for (let i = 0; i < count; i++) {
+        const sparkle = document.createElement("span");
+
+        sparkle.className = "sparkle";
+
+        const color = sparkleColors[
+            Math.floor(Math.random() * sparkleColors.length)
+        ];
+
+        sparkle.style.setProperty("--spark-color", color);
+        sparkle.style.left = (Math.random() * 100) + "%";
+        sparkle.style.top = (Math.random() * 100) + "%";
+
+        sparkle.style.setProperty(
+            "--dx",
+            ((Math.random() - 0.5) * (burst ? 300 : 120)) + "px"
+        );
+
+        sparkle.style.setProperty(
+            "--dy",
+            ((Math.random() - 0.5) * (burst ? 300 : 120)) + "px"
+        );
+
+        sparkle.style.setProperty(
+            "--duration",
+            (1.2 + Math.random() * 1.8) + "s"
+        );
+
+        sparkleLayer.appendChild(sparkle);
+
+        setTimeout(() => sparkle.remove(), 3200);
+    }
+}
+
+let sparkleInterval;
+
+function startDiwaliSparkles() {
+    sparkleInterval = setInterval(() => {
+        createSparkles(10);
+    }, 150);
+}
+
+function stopDiwaliSparkles() {
+    clearInterval(sparkleInterval);
+}
+
+/* --------------------------------
+   CONTINUOUS FIREWORKS
+-------------------------------- */
+
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+
+let width, height;
+let rockets = [];
+let particles = [];
+
+const fireworkColors = [
+    "#ff1744",
+    "#00e676",
+    "#2979ff",
+    "#ffd600",
+    "#ffffff",
+    "#ff00ff",
+    "#00ffff",
+    "#b026ff"
+];
+
+function resizeCanvas() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    width = canvas.clientWidth;
+    height = canvas.clientHeight;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+class Rocket {
+    constructor() {
+        this.x = Math.random() * width;
+        this.y = height;
+        this.targetY = height * (0.15 + Math.random() * 0.45);
+        this.speed = 5 + Math.random() * 3;
+        this.color = fireworkColors[
+            Math.floor(Math.random() * fireworkColors.length)
+        ];
+    }
+
+    update() {
+        this.y -= this.speed;
+
+        if (this.y <= this.targetY) {
+            explode(this.x, this.y, this.color);
+            return false;
+        }
+
+        return true;
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+    }
+}
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = Math.random() < .2
+            ? fireworkColors[Math.floor(Math.random() * fireworkColors.length)]
+            : color;
+
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 4 + 1;
+
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.alpha = 1;
+        this.decay = .009 + Math.random() * .015;
+        this.size = Math.random() * 2 + 1;
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += .025;
+        this.vx *= .99;
+        this.vy *= .99;
+        this.alpha -= this.decay;
+
+        return this.alpha > 0;
+    }
+
+    draw() {
+        ctx.save();
+
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = this.color;
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+    }
+}
+
+function explode(x, y, color) {
+    const count = 45 + Math.floor(Math.random() * 35);
+
+    for (let i = 0; i < count; i++) {
+        particles.push(new Particle(x, y, color));
+    }
+}
+
+function animateFireworks() {
+    ctx.clearRect(0, 0, width, height);
+
+    if (Math.random() < .045) {
+        rockets.push(new Rocket());
+    }
+
+    rockets = rockets.filter(rocket => {
+        const alive = rocket.update();
+        if (alive) rocket.draw();
+        return alive;
+    });
+
+    particles = particles.filter(particle => {
+        const alive = particle.update();
+        if (alive) particle.draw();
+        return alive;
+    });
+
+    requestAnimationFrame(animateFireworks);
+}
+
+animateFireworks();
+</script>
+
+</body>
+</html>
